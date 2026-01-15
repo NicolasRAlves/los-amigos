@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Amigos | Cardápio Digital</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#050505',
+                            gold: '#D4AF37',
+                            red: '#E31B23',
+                            glass: 'rgba(255, 255, 255, 0.03)',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Estilos de Lista e Cards */
+        .glass-list-item {
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sub-header-styled {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+        .sub-header-styled h4 {
+            color: #D4AF37;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .sub-header-styled .line {
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(90deg, #D4AF37 0%, transparent 100%);
+            opacity: 0.4;
+        }
+
+        .info-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 0.7rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+        .info-box strong { color: #D4AF37; }
+
+        .saturday-special {
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.05) 0%, rgba(5, 5, 5, 0.8) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.05);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Botão Voltar ao Topo */
+        #back-to-top {
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0;
+            pointer-events: none;
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="fixed top-0 w-full z-50 bg-[#050505]/95 backdrop-blur-lg border-b border-white/5 transition-all duration-300 shadow-lg shadow-black/50">
+        <div class="container mx-auto px-4 pt-3 pb-2">
+            
+            <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full border border-brand-gold/30 p-0.5 overflow-hidden bg-black relative">
+                        <img src="logo-los-amigos.avif" alt="Logo Los Amigos" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <div class="flex flex-col">
+                        <h1 class="text-lg font-bold tracking-wide text-brand-gold uppercase leading-none">Los Amigos</h1>
+                        <span class="text-[10px] text-gray-400">Restaurante & Pizzaria</span>
+                    </div>
+                </div>
+                
+                <a href="#" class="bg-white/5 p-2 rounded-full text-green-500 border border-green-500/20 hover:bg-green-500/10 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01C17.18 3.03 14.69 2 12.04 2zM12.05 20.21c-1.5 0-2.96-.39-4.27-1.15l-.3-.18-3.11.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.45 0-4.64 3.77-8.4 8.4-8.4 2.24 0 4.35.87 5.94 2.46 1.59 1.59 2.46 3.7 2.46 5.94 0 4.63-3.77 8.31-8.49 8.31z"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="relative mb-3">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" id="search-input" placeholder="Buscar no cardápio..." class="w-full bg-white/5 border border-white/10 text-white text-sm rounded-lg focus:ring-brand-gold focus:border-brand-gold block pl-10 p-2.5 placeholder-gray-500 outline-none transition-all">
+            </div>
+            
+            <nav class="flex overflow-x-auto no-scrollbar gap-3 pb-1" id="category-nav">
+                </nav>
+        </div>
+    </header>
+
+    <div class="h-40"></div>
+
+    <section class="px-4 mb-8 reveal active">
+        <div class="rounded-2xl overflow-hidden relative h-40 border border-white/10 shadow-lg shadow-brand-gold/5">
+            <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover opacity-50">
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/60 to-transparent flex flex-col justify-center px-6">
+                <h2 class="text-2xl font-bold text-white leading-tight">Cardápio <br><span class="text-brand-gold">Completo</span></h2>
+                <p class="text-xs text-gray-300 mt-1 max-w-[200px]">Qualidade que você confia.</p>
+            </div>
+        </div>
+    </section>
+
+    <main id="menu-container" class="container mx-auto px-4 space-y-10 min-h-screen">
+        </main>
+
+    <footer class="bg-[#080808] border-t border-brand-gold/10 pt-12 pb-8 text-sm relative overflow-hidden mt-16">
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-gold/50 to-transparent"></div>
+
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+
+                <div class="text-center md:text-left space-y-4">
+                    <h3 class="text-2xl font-bold text-brand-gold flex items-center justify-center md:justify-start gap-2">
+                        <span>📍</span> Los Amigos
+                    </h3>
+                    <address class="text-gray-400 not-italic leading-relaxed text-xs md:text-sm">
+                        Rua José Bocchiglieri, 145<br>
+                        Vila São José (Cidade Dutra)<br>
+                        São Paulo - SP
+                    </address>
+                    
+                    <div class="flex flex-col gap-2 items-center md:items-start pt-2">
+                        <a href="tel:1135623631" class="flex items-center gap-2 text-gray-300 hover:text-brand-gold transition-colors p-2 bg-white/5 rounded-lg w-full md:w-auto justify-center md:justify-start border border-white/5 hover:border-brand-gold/30">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                            (11) 3562-3631
+                        </a>
+                        <a href="tel:1135625960" class="flex items-center gap-2 text-gray-300 hover:text-brand-gold transition-colors p-2 bg-white/5 rounded-lg w-full md:w-auto justify-center md:justify-start border border-white/5 hover:border-brand-gold/30">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                            (11) 3562-5960
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center space-y-4 bg-white/5 p-6 rounded-xl border border-white/5">
+                    <h4 class="text-brand-gold font-bold uppercase tracking-widest text-xs mb-2 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Horário de Funcionamento
+                    </h4>
+                    <div class="space-y-3 text-gray-300 text-xs">
+                        <div class="flex justify-between border-b border-white/10 pb-2 border-dashed">
+                            <span>Segunda a Sexta</span>
+                            <span class="text-white font-medium">11:00 às 00:00</span>
+                        </div>
+                        <div class="flex justify-between pt-1">
+                            <span>Sábado e Domingo</span>
+                            <span class="text-white font-medium">11:00 às 01:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center md:text-right space-y-8">
+                    
+                    <div>
+                        <h4 class="text-brand-gold font-bold uppercase tracking-widest text-xs mb-4">Siga-nos</h4>
+                        <div class="flex justify-center md:justify-end gap-3">
+                            <a href="https://instagram.com/losamigosofficiall" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-brand-gold hover:text-black hover:border-brand-gold transition-all duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                            </a>
+                            <a href="https://facebook.com/oficial.losamigos" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-brand-gold font-bold uppercase tracking-widest text-xs mb-2">Pagamento</h4>
+                        <div class="inline-flex flex-col items-center md:items-end">
+                            <p class="text-[10px] text-gray-500 mb-2">Dinheiro • Débito • Crédito</p>
+                            <div class="flex gap-2 opacity-60">
+                                <div class="h-6 w-9 bg-gray-700 rounded flex items-center justify-center text-[8px]">$$$</div>
+                                <div class="h-6 w-9 bg-gray-700 rounded flex items-center justify-center text-[8px]">CARD</div>
+                                <div class="h-6 w-9 bg-gray-700 rounded flex items-center justify-center text-[8px]">PIX</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/5 pt-6 text-center flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-600">
+                <p>&copy; 2026 Los Amigos. Todos os direitos reservados.</p>
+                <div class="flex items-center gap-2 mt-2 md:mt-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                    <p>Última atualização: 13/01/2026</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button id="back-to-top" onclick="scrollToTop()" class="fixed bottom-6 right-6 z-50 bg-brand-gold text-brand-dark p-3 rounded-full shadow-lg shadow-brand-gold/30 hover:scale-110 transition-transform">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <script>
+        // --- HELPERS E CONSTANTES DE IMAGEM ---
+        const IMG_JAPA = "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=300&q=60";
+        const IMG_MEX = "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=300&q=60";
+        const IMG_PIZZA = "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=300&q=60";
+        const IMG_BURGER = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=60";
+        const IMG_BEIRUTE = "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=300&q=60";
+        const IMG_PORCAO = "https://images.unsplash.com/photo-1604908177453-7462950a6a3b?auto=format&fit=crop&w=300&q=60";
+        const IMG_SUCO = "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=300&q=60";
+        const IMG_REFRI = "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=300&q=60";
+        const IMG_CERVEJA = "https://images.unsplash.com/photo-1618641986557-1ecd23095910?auto=format&fit=crop&w=300&q=60";
+        const IMG_DRINK = "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=300&q=60";
+        const IMG_SOBREMESA = "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=300&q=60";
+        const IMG_ACAI = "https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=300&q=60";
+        const IMG_VINHO = "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=300&q=60";
+
+        function getImage(key, category) {
+            if (category === "Especialidade Japonesa") return IMG_JAPA;
+            if (category === "Comida Mexicana") return IMG_MEX;
+            if (category === "Pizzas") return IMG_PIZZA;
+            if (category === "Hamburgueria Artesanal") return IMG_BURGER;
+            if (category === "Beirutes") return IMG_BEIRUTE;
+            if (category === "Porções") return IMG_PORCAO;
+            if (category === "Sucos Naturais e Polpas") return IMG_SUCO;
+            if (category === "Refrigerantes") return IMG_REFRI;
+            if (category === "Cervejas") return IMG_CERVEJA;
+            if (category === "Drinks e Caipirinhas") return IMG_DRINK;
+            if (category === "Sobremesas") return IMG_SOBREMESA;
+            if (category === "Açai") return IMG_ACAI;
+            if (category === "Vinhos") return IMG_VINHO;
+
+            const images = {
+                'feijoada': 'https://images.unsplash.com/photo-1574653853117-027c918516e5?auto=format&fit=crop&w=300&q=60',
+                'side': 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=300&q=60',
+                'milanesa': 'https://images.unsplash.com/photo-1604135307399-86c6ce0aba8e?auto=format&fit=crop&w=300&q=60',
+                'steak': 'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=300&q=60',
+                'picanha': 'https://images.unsplash.com/photo-1594041680534-e8c8cdebd659?auto=format&fit=crop&w=300&q=60',
+                'salmon': 'https://images.unsplash.com/photo-1467003909585-2f8a7270028d?auto=format&fit=crop&w=300&q=60',
+                'parmegiana': 'https://images.unsplash.com/photo-1599354607478-73889f8d75cf?auto=format&fit=crop&w=300&q=60',
+                'parm_chicken': 'https://images.unsplash.com/photo-1627042633145-c7644d841e96?auto=format&fit=crop&w=300&q=60',
+                'egg_steak': 'https://images.unsplash.com/photo-1644365313176-3511ebf10731?auto=format&fit=crop&w=300&q=60',
+                'grilled_chicken': 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=300&q=60',
+                'sausage': 'https://images.unsplash.com/photo-1585670149967-b4f4da66cc4e?auto=format&fit=crop&w=300&q=60',
+                'omelet': 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=300&q=60',
+                'salad_exec': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=300&q=60',
+                'default': 'https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=300&q=60'
+            };
+            return images[key] || images['default'];
+        }
+
+        // --- DADOS ---
+        const menuData = [
+            // 1. SÁBADO
+            {
+                category: "Especial de Sábado",
+                description: "Disponível apenas aos sábados.",
+                highlight: true, 
+                items: [
+                    { name: "Feijoada P", desc: "Serve 1 pessoa.", price: 39.00, img: "feijoada" },
+                    { name: "Guarnição da Feijoada", desc: "", price: 25.00, img: "side" },
+                    { name: "Feijoada M", desc: "Serve 2 pessoas.", price: 65.00, img: "feijoada" },
+                    { name: "Feijoada G", desc: "Serve 3 pessoas.", price: 80.00, img: "feijoada" },
+                ]
+            },
+            // 2. EXECUTIVOS
+            {
+                category: "Pratos Executivos",
+                description: "Sabor caseiro.",
+                items: [
+                    { name: "Salada 05", desc: "Omelete de frios, fritas, alface, palmito, e cenoura.", price: 24.00, img: "salad_exec" },
+                    { name: "Salada 06", desc: "Peito de peru, queijo, presunto, fritas, alface, pepino, tomate e cebola.", price: 23.00, img: "salad_exec" },
+                    { name: "Frango a Milanesa", desc: "Frango a Milanesa, fritas, arroz, feijão e salada.", price: 32.00, img: "milanesa" },
+                    { name: "Contrafilé", desc: "Contrafilé, fritas, arroz, feijão e salada.", price: 37.00, img: "steak" },
+                    { name: "Calabresa Acebolada", desc: "Calabresa Acebolada, fritas, farofa, arroz, feijão e salada.", price: 25.00, img: "sausage" },
+                    { name: "Filé de Frango", desc: "Filé de frango, fritas, arroz, feijão e salada.", price: 25.00, img: "grilled_chicken" },
+                    { name: "Bife", desc: "Bife, fritas, arroz, feijão e salada.", price: 25.00, img: "steak" },
+                    { name: "Bife a Cavalo", desc: "Bife C/Ovo, fritas, arroz, feijão e salada.", price: 28.00, img: "egg_steak" },
+                    { name: "Omelete de Frios", desc: "Omelete de Frios, presunto, queijo, fritas, arroz, feijão e salada", price: 25.00, img: "omelet" },
+                    { name: "Salmão", desc: "Salmão, fritas, arroz, feijão e salada.", price: 51.00, img: "salmon" },
+                    { name: "Picanha ao Alho", desc: "Picanha ao Alho, fritas, farofa, arroz, feijão e salada.", price: 55.00, img: "picanha" },
+                    { name: "Parmegiana Frango", desc: "Parmegiana de Frango, fritas, arroz, feijão e salada.", price: 36.00, img: "parm_chicken" },
+                    { name: "Parmegiana de Carne", desc: "Parmegiana de Carne, fritas, arroz, feijão e salada.", price: 39.00, img: "parmegiana" },
+                    { name: "Bife a Milanesa", desc: "Bife a Milanesa, fritas, arroz, feijão e salada.", price: 34.00, img: "milanesa" },
+                    { subHeader: "Saladas" },
+                    { name: "Salada 01", desc: "Bife, fritas, alface, tomate, cenoura e cebola.", price: 24.00, img: "salad_exec" },
+                    { name: "Salada 02", desc: "Filé de frango, fritas, alface, tomate, cenoura e cebola.", price: 22.00, img: "salad_exec" },
+                    { name: "Salada 03", desc: "2 ovos cozidos, fritas, queijo fresco, palmito tomate, cenoura e cebola.", price: 22.00, img: "salad_exec" },
+                    { name: "Salada 04", desc: "Salmão, fritas, alface, pepino, tomate, e cebola.", price: 43.00, img: "salad_exec" },
+                ]
+            },
+            // 3. JAPONESA
+            {
+                category: "Especialidade Japonesa",
+                description: "Peça viagem ou delivery.",
+                items: [
+                    { subHeader: "Burguer" },
+                    { name: "Burguer Holl", desc: "Arroz, kani, salmão empanado, crean cheese e salada.", price: 49.00 },
+                    { subHeader: "Hot-Holl Doce" },
+                    { name: "Brigadeiro", desc: "( 15 unidades )", price: 30.00 },
+                    { name: "Romeu & Julieta", desc: "( 15 unidades )", price: 30.00 },
+                    { subHeader: "DJO" },
+                    { name: "DJOSalmão", desc: "( 8 unidades )", price: 35.00 },
+                    { name: "Camarão", desc: "( 8 unidades )", price: 41.00 },
+                    { name: "Mexicano", desc: "( 8 unidades )", price: 35.00 },
+                    { name: "Chico César", desc: "( 8 unidades )", price: 41.00 },
+                    { name: "Ovelha", desc: "( 8 unidades )", price: 35.00 },
+                    { name: "Vegetariano", desc: "( 8 unidades )", price: 26.00 },
+                    { subHeader: "Temaki" },
+                    { name: "TemakiSalmão", desc: "Cru, batido ou em cubos", price: 35.00 },
+                    { name: "Salmão Grelhado", desc: "", price: 35.00 },
+                    { name: "Salmão Grysp", desc: "Empanado", price: 41.00 },
+                    { name: "Salmão Roll", desc: "Empanado e frito", price: 44.00 },
+                    { name: "Salmão Skin", desc: "Pele de salmão frita", price: 31.00 },
+                    { name: "Temaki em Cubos no Copo", desc: "", price: 45.00 },
+                    { name: "Califórnia", desc: "Manga, pepino e kani", price: 26.00 },
+                    { name: "Temaki Grelhado no Copo", desc: "", price: 42.00 },
+                    { name: "Camarão", desc: "Acompanha: cebolinha e cream cheese", price: 45.00 },
+                    { subHeader: "Combinados" },
+                    { name: "Combo Pequeno", desc: "26 unidades: 5 Hot Roll, 8 Uramakis variados, 1 Skim, 3 Sashimi salmão, 3 Niguiri, 4 Hossomaki, 2 Salmão", price: 66.00 },
+                    { name: "Combo Grande", desc: "45 unidades: 15 Hot Roll, 6 Sashimi, 8 Uramakis, 6 Hossomaki, 3 Salmão, 3 Skim, 3 Niguiri de Salmão, 3 Niguiri de Skin, 2 Joy, 2 Chico César", price: 105.00 },
+                    { subHeader: "Variados" },
+                    { name: "Sashimi Salmão", desc: "( 6 unidades )", price: 35.00 },
+                    { name: "Yakissoba Tradicional (P)", desc: "( Pequeno )", price: 42.00 },
+                    { name: "Yakissoba Tradicional (G)", desc: "( Grande )", price: 55.00 },
+                    { name: "Ceviche Salmão", desc: "( 15 Fatias )", price: 59.00 },
+                    { name: "Sunomono", desc: "", price: 20.00 },
+                    { name: "Sensação", desc: "( 15 unidades )", price: 30.00 },
+                    { subHeader: "Hossomaki" },
+                    { name: "Hossomaki Salmão", desc: "(8 unidades)", price: 26.00 },
+                    { name: "Hossomaki Pepino", desc: "(8 unidades)", price: 24.00 },
+                    { name: "Hossomaki Kani", desc: "(8 unidades)", price: 29.00 },
+                    { name: "Hossomaki Camarão", desc: "(8 unidades)", price: 42.00 },
+                    { subHeader: "Hot Roll" },
+                    { name: "Hot Roll Porção", desc: "(15 unidades)", price: 37.00 },
+                    { name: "Salmão Holl", desc: "(15 unidades)", price: 44.00 },
+                    { subHeader: "Tepan" },
+                    { name: "Tepan Salmão", desc: "Acompanha legumes e arroz.", price: 60.00 },
+                    { name: "Frango", desc: "Acompanha legumes e arroz.", price: 40.00 },
+                    { name: "Carne", desc: "Acompanha legumes e arroz.", price: 45.00 },
+                    { subHeader: "Niguiri" },
+                    { name: "Niguiri Salmão", desc: "(6 unidades)", price: 33.00 },
+                    { name: "Skin", desc: "(6 unidades)", price: 31.00 },
+                    { name: "Camarão", desc: "(6 unidades)", price: 39.00 },
+                    { subHeader: "Uramakis" },
+                    { name: "Uramakis Salmão", desc: "Acompanha cebolinha e cream cheese. (8 un)", price: 34.00 },
+                    { name: "Skin", desc: "Acompanha cebolinha e cream cheese. (8 un)", price: 32.00 },
+                    { name: "Califórnia", desc: "Acompanha cebolinha e cream cheese. (8 un)", price: 26.00 },
+                    { name: "Cerbiche Roll", desc: "Acompanha cebolinha e cream cheese. (8 un)", price: 36.00 },
+                    { name: "Camarão", desc: "Acompanha cebolinha e cream cheese. (8 un)", price: 41.00 },
+                    { subHeader: "Entradas" },
+                    { name: "GuiozaCarne Suína", desc: "(6 unidades)", price: 28.00 },
+                    { name: "Shimeji", desc: "", price: 17.00 }
+                ]
+            },
+            // 4. MEXICANA
+            {
+                category: "Comida Mexicana",
+                description: "Peça viagem ou delivery.",
+                items: [
+                    { name: "Chilli Beans", desc: "Deliciosa pasta de feijão com carne moída, suavemente picante, coberta com queijo e acompanhado de nachos.", price: 40.00 },
+                    { name: "Quesadillas carne", desc: "Tortilhas de trigo mexicana douradas na chapa, recheadas com queijo, carne e vinagrete. Acompanha: Sour cream, guacamole.", price: 41.00 },
+                    { name: "Quesadillas frango", desc: "Tortilhas de trigo mexicana douradas na chapa, recheadas com queijo, frango e vinagrete. Acompanha: Sour cream, guacamole.", price: 36.00 },
+                    { name: "Tacos Carne | 3 unidades", desc: "Concha de milho crocante, recheada com carne, alface, tomate, queijo e vinagrete. Acompanha: sour cream e guacamole.", price: 36.00 },
+                    { name: "Tacos Frango | 3 unidades", desc: "Concha de milho crocante, recheada com frango, alface, tomate, queijo e vinagrete. Acompanha: sour cream, guacamole.", price: 36.00 },
+                    { name: "Tacos Chilli | 3 unidades", desc: "Concha de milho crocante, recheada com chilli, alface, tomate,queijo e vinagrete. Acompanha: sour cream e guacamole", price: 32.00 },
+                    { name: "Burritos de Carne", desc: "Tradicional tortilhas de trigo, enroladas e recheadas com carne, alface, tomate e queijo. Acompanha: sour cream, guacamole.", price: 35.00 },
+                    { name: "Burritos de Frango", desc: "Tradicional tortilhas de trigo, enroladas e recheadas com frango, alface, tomate e queijo. Acompanha: sour cream, guacamole.", price: 33.00 },
+                    { name: "Guacamole", desc: "Salada de abacate servida com nachos.", price: 30.00 },
+                    { name: "Burritos de Chilli Beans", desc: "Tradicional tortilhas de trigo, enroladas e recheadas com chilli beans, alface, tomate e queijo. Acompanha: sour cream, guacamole.", price: 33.00 },
+                ]
+            },
+            // 5. PIZZAS
+            {
+                category: "Pizzas",
+                description: "Tradicionais, Doces e Holandesas.",
+                contextInfo: "<strong>Pizza meio a meio será cobrado pelo maior valor.</strong><br>Grande: 8 fatias | Broto: 4 fatias.<br><strong>Bordas (Grande):</strong> Cheddar R$18, Catupiry/Mussarela R$20, Calabresa/Choc R$17.<br><strong>Bordas (Broto):</strong> Cheddar/Catupiry/Mussarela R$13, Calabresa/Choc R$12.",
+                items: [
+                    { subHeader: "Pizzas Tradicionais" },
+                    { name: "Pizza Lasanha à Bolonhesa (NOVIDADE)", desc: "Massa da pizza, molho à bolonhesa, presunto e mussarela / Massa de lazanha, molho à bolonhesa, presunto, mussarela, orégano, manjericão e azeitonas", customPrice: "G: R$65 | B: R$47" },
+                    { name: "Americana", desc: "Presunto, ovos, ervilha, cebola, palmito, e mussarela.", customPrice: "G: R$65 | B: R$47" },
+                    { name: "Atum I", desc: "Atum, cebola e azeitonas.", customPrice: "G: R$65 | B: R$47" },
+                    { name: "Atum II", desc: "Atum, cebola, azeitonas e mussarela.", customPrice: "G: R$69 | B: R$50" },
+                    { name: "Alho", desc: "Alho frito, mussarela e parmesão.", customPrice: "G: R$61 | B: R$44" },
+                    { name: "À Moda do Pizzaiolo", desc: "Lombo defumado, queijo cheddar, bacon e cebola.", customPrice: "G: R$69 | B: R$50" },
+                    { name: "Baiana I", desc: "Calabresa moída, pimenta e cebola.", customPrice: "G: R$55 | B: R$40" },
+                    { name: "Bacon I", desc: "Bacon, mussarela, ovos, cebola e azeitonas.", customPrice: "G: R$65 | B: R$47" },
+                    { name: "Bauru", desc: "Presunto, mussarela e rodelas de tomate.", customPrice: "G: R$58 | B: R$42" },
+                    { name: "Brócolis I", desc: "Brócolis, mussarela e alho frito.", customPrice: "G: R$65 | B: R$47" },
+                    { name: "Brócolis II", desc: "Brócolis, bacon, mussarela, alho frito e azeitonas.", customPrice: "G: R$69 | B: R$50" },
+                    { name: "Calabresa I", desc: "Calabresa, azeitonas e cebola.", customPrice: "G: R$54 | B: R$39" },
+                    { name: "Calabresa II", desc: "Calabresa, cebola e mussarela.", customPrice: "G: R$60 | B: R$43" },
+                    { name: "Carne Seca", desc: "Carne seca acebolada e mussarela.", customPrice: "G: R$77 | B: R$55" },
+                    { name: "Caipira", desc: "Frango desfiado, milho e catupiry.", customPrice: "G: R$60 | B: R$43" },
+                    { name: "Camarão", desc: "Camarão refogado, cebola, catupiry ou mussarela.", customPrice: "G: R$120 | B: R$68" },
+                    { name: "2 Queijos", desc: "Mussarela e catupiry.", customPrice: "G: R$65 | B: R$47" },
+                    { name: "4 Queijos", desc: "Mussarela, catupiry, provolone e parmesão.", customPrice: "G: R$71 | B: R$51" },
+                    { name: "Fiorentina", desc: "Presunto, bacon, champignon e catupiry.", customPrice: "G: R$65 | B: R$47" },
+                    { name: "Frango com Mussarela", desc: "Frango desfiado, milho e mussarela.", customPrice: "G: R$60 | B: R$43" },
+                    { name: "Frango com Catupiry", desc: "Frango desfiado, catupiry e azeitonas.", customPrice: "G: R$60 | B: R$43" },
+                    { name: "Los Amigos", desc: "Salmão, alecrim, alcaparras e cream cheese.", customPrice: "G: R$96 | B: R$69" },
+                    { name: "Lombo", desc: "Lombo defumado, mussarela, cebola e azeitonas.", customPrice: "G: R$65 | B: R$47" },
+                    { name: "Mussarela", desc: "Mussarela", customPrice: "G: R$54 | B: R$39" },
+                    { name: "Marguerita", desc: "Mussarela, tomate e manjericão.", customPrice: "G: R$57 | B: R$41" },
+                    { name: "Milho com Catupiry", desc: "Milho, catupiry e azeitonas.", customPrice: "G: R$57 | B: R$41" },
+                    { name: "Napolitana", desc: "Mussarela parmesão e tomate.", customPrice: "G: R$60 | B: R$43" },
+                    { name: "Pepperoni", desc: "Pepperoni, mussarela, azeitonas e manjericão fresco.", customPrice: "G: R$70 | B: R$50" },
+                    { name: "Palmito", desc: "Palmito, mussarela e azeitonas.", customPrice: "G: R$62 | B: R$45" },
+                    { name: "Peruana", desc: "Peito de peru defumado, parmesão, mussarela e azeitonas.", customPrice: "G: R$69 | B: R$50" },
+                    { name: "Portuguesa", desc: "Presunto, ovos, cebola e mussarela.", customPrice: "G: R$62 | B: R$45" },
+                    { name: "Rúcula", desc: "Rúcula, tomate seco, e mussarela de búfala.", customPrice: "G: R$59 | B: R$43" },
+                    { name: "Toscana", desc: "Calabresa moída, mussarela e parmesão.", customPrice: "G: R$59 | B: R$43" },
+                    { name: "Vegetariana", desc: "Brócolis, escarola, milho, ervilha, palmito, cebola, azeitonas e mussarela.", customPrice: "G: R$63 | B: R$45" },
+                    { name: "Pizza Temaki", desc: "", customPrice: "G: R$96 | B: R$43" },
+
+                    { subHeader: "Pizzas Doces" },
+                    { name: "Brigadeiro", desc: "Chocolate cremoso e granulado.", customPrice: "G: R$55 | B: R$40" },
+                    { name: "Banana com Chocolate", desc: "Chocolate cremoso e banana.", customPrice: "G: R$55 | B: R$40" },
+                    { name: "Romeu e Julieta", desc: "Mussarela e goiabada.", customPrice: "G: R$55 | B: R$40" },
+                    { name: "Sensação", desc: "Chocolate cremoso e morango.", customPrice: "G: R$74 | B: R$53" },
+
+                    { subHeader: "Pizzas Holandesas" },
+                    { name: "Bauru Especial", desc: "Molho Pomodoro, Presunto, Azeitonas, Tomate picado, Azeitonas, Bacon e Mussarela. Cobertura: bacon, tomate e orégano", customPrice: "R$ 110,00" },
+                    { name: "Caipira Especial", desc: "Molho Pomodoro, Frango, Milho, Tomate picado e Mussarela. Cobertura: batata frita, cheddar, bacon, orégano.", customPrice: "R$ 110,00" },
+                    { name: "Brócolis Especial", desc: "Molho Pomodoro, Brócolis, Palmito, Mussarela, Carne em cubos. Cobertura: alho frito, orégano, azeitonas.", customPrice: "R$ 110,00" },
+                    { name: "Calabresa c/ 4 Queijos", desc: "Molho Pomodoro, Calabresa, Cebola, Mussarela, Catupiry Original, Provolone e Parmesão. Cobertura: orégano, azeitonas", customPrice: "R$ 110,00" },
+                    { name: "Frango c/ 4 Queijos", desc: "Molho Pomodoro, Frango desfiado, Mussarela, Catupiry original, Provolone e Parmesão. Cobertura: orégano, azeitonas.", customPrice: "R$ 110,00" },
+                    { name: "À moda do Chefe", desc: "Molho Pomodoro, Carne seca, Tomate picado, Cebola, Catupiry original e Mussarela. Cobertura: orégano, rúcula, tomate seco, mussarela de búfala", customPrice: "R$ 125,00" }
+                ]
+            },
+            // 6. HAMBURGUERIA
+            {
+                category: "Hamburgueria Artesanal",
+                description: "Sabor autêntico.",
+                items: [
+                    { name: "Burguin Dos Amigos (PROMOÇÃO)", desc: "2 Smashs 50g cada, 1 queijo prato, ketchup e mostarda, cebola roxa picada e 3 picles no pão sem gergelim.", price: 27.00 },
+                    { name: "Classic (PROMOÇÃO)", desc: "2 Smashs de 50g cada, 1 queijo prato, 2 tiras de bacon, 2 fatias de tomates e alface americana no pão com gergelim.", price: 27.00 },
+                    { name: "Los Burguer", desc: "2 Hambúrguer, 2 Fatias de Queijo, bacon, Alface Crespo, Molho Especial, Ovo e Fritas. (SUGESTÃO DA CASA)", price: 45.00 },
+                    { name: "Burger Cheddar Mex", desc: "Hambúrguer Artesanal 130g, cebola, shoyu, cheddar cremoso e nossa exclusiva maionese verde. Acompanha: Quesadillas, appetizer e hot salsa.", price: 36.00 },
+                    { name: "Chilli Burger", desc: "Hambúrguer artesanal 130g, nosso delicioso chilli beans, queijo prato e maionese e batata frita", price: 32.00 },
+                    { name: "Prime Burger", desc: "Pão com gergelim, hambúrguer, maionese da casa, cebola roxa, tomate, alface e queijo prato.", price: 33.00 },
+                    { name: "Americano", desc: "Hambúrguer artesanal 130g, queijo prato, ovo, tomate e maionese. Acompanha fritas.", price: 33.00 },
+                    { name: "Burger Salad", desc: "Hambúrguer artesanal 130g, alface, tomate, picles, queijo prato e maionese verde. Acompanha: Fritas.", price: 35.00 },
+                    { name: "Pratos Kids", desc: "Nuggets, quesadilla com queijo e uma pequena porção de batatas fritas.", price: 31.00 },
+                    { name: "Kids Burger", desc: "2 Mini hambúrgueres e fritas", price: 30.00 },
+                    { name: "Burger Barbecue", desc: "Pão, hambúrguer, cebola com barbecue, tomate, queijo prato, maionese da casa e alface.", price: 30.00 },
+                    { name: "Burger Cheddar", desc: "Pão com gergelim, hambúrguer maionese da casa, cebola roxa, tomate, alface americana e cheddar", price: 33.00 },
+                    { name: "American Burger", desc: "Pão com gergelim, hambúrguer, cebola, bacon, queijo prato, alface, tomate e maionese da casa. Acompanha fritas hot.", price: 40.00 },
+                    { name: "Los Chicken", desc: "Frango frito empanado, alface, tomate, molho de alho e cheddar", price: 37.00 }
+                ]
+            },
+            // 7. BEIRUTES
+            {
+                category: "Beirutes",
+                description: "",
+                items: [
+                    { name: "Frango com Catupiry", desc: "", price: 45.00 },
+                    { name: "Contra Filé", desc: "", price: 55.00 },
+                    { name: "Calabresa", desc: "", price: 40.00 },
+                    { name: "Filé de Frango", desc: "", price: 50.00 },
+                    { name: "Beirute de Picanha", desc: "", price: 65.00 }
+                ]
+            },
+            // 8. PORÇÕES
+            {
+                category: "Porções",
+                description: "",
+                items: [
+                    { name: "Filé de Frango", desc: "Com Pães, Molho de alho e rose", price: 60.00 },
+                    { name: "Contra Filé", desc: "Com Pães, Molho de alho e rosé", price: 90.00 },
+                    { name: "Picanha", desc: "Com Pães, Farofa, Vinagrete, Molho de alho e rosé", price: 140.00 },
+                    { name: "Calabresa Acebolada", desc: "Com Pães, Molho de alho e rosé", price: 55.00 },
+                    { name: "Cebola Empanada", desc: "", price: 50.00 },
+                    { name: "Batatas Fritas", desc: "", price: 35.00 },
+                    { name: "Fritas com Bacon e Queijo", desc: "", price: 45.00 },
+                    { name: "Fritas com Cheddar e Bacon", desc: "", price: 45.00 },
+                    { name: "Camarão com 10 Unidades", desc: "", price: 90.00 }
+                ]
+            },
+            // 9. SUCOS
+            {
+                category: "Sucos Naturais e Polpas",
+                description: "",
+                items: [
+                    { name: "Limonada Suíça", desc: "", price: 17.00 },
+                    { name: "Laranja com Morango", desc: "", price: 17.00 },
+                    { name: "Abacaxi", desc: "", price: 13.00 },
+                    { name: "Acerola", desc: "", price: 13.00 },
+                    { name: "Caju", desc: "", price: 13.00 },
+                    { name: "Cupuaçu", desc: "", price: 13.00 },
+                    { name: "Goiaba", desc: "", price: 13.00 },
+                    { name: "Morango", desc: "", price: 16.00 },
+                    { name: "Maracujá", desc: "", price: 14.00 },
+                    { name: "Manga", desc: "", price: 13.00 },
+                    { name: "Limão", desc: "", price: 14.00 },
+                    { name: "Laranja", desc: "", price: 15.00 },
+                    { name: "Melancia", desc: "", price: 16.00 },
+                    { name: "Abacaxi com Hortelã", desc: "", price: 13.00 },
+                    { name: "Laranja com Acerola", desc: "", price: 16.00 },
+                    { name: "Melancia com Morango", desc: "", price: 16.00 },
+                    { name: "Frutas Vermelhas", desc: "", price: 13.00 },
+                    { name: "Suco de Açaí 400ml", desc: "", price: 18.00 }
+                ]
+            },
+            // 10. REFRIGERANTES
+            {
+                category: "Refrigerantes",
+                description: "Consulte o garçom.",
+                items: [
+                    { name: "Coca-Cola KS", desc: "", price: 8.00 },
+                    { name: "H2o", desc: "", price: 9.00 },
+                    { name: "Água C/Gás", desc: "", price: 6.00 },
+                    { name: "Refrigerantes 350ml", desc: "", price: 9.00 },
+                    { name: "Água Tônica", desc: "", price: 7.00 },
+                    { name: "Água Mineral", desc: "", price: 5.00 }
+                ]
+            },
+            // 11. CERVEJAS
+            {
+                category: "Cervejas",
+                description: "",
+                items: [
+                    { name: "Original 600ml", desc: "", price: 16.00 },
+                    { name: "Serramalte 600ml", desc: "", price: 18.00 },
+                    { name: "Corona Long Neck", desc: "", price: 13.00 },
+                    { name: "Brahma 600ml", desc: "", price: 16.00 },
+                    { name: "Heineken 600ml", desc: "", price: 19.00 },
+                    { name: "Heineken Long Neck", desc: "", price: 13.00 },
+                    { name: "Budweiser 600ml", desc: "", price: 15.00 },
+                    { name: "Budweiser Long Neck", desc: "", price: 11.00 },
+                    { name: "Skol 600ml", desc: "", price: 13.00 },
+                    { name: "Skol Beats 313ml", desc: "", price: 13.00 },
+                    { name: "Spaten 600ml", desc: "", price: 18.00 },
+                    { name: "Stella 600ml", desc: "", price: 18.00 },
+                    { name: "Sminorff Long Neck", desc: "", price: 13.00 },
+                    { name: "Stella Long Neck", desc: "", price: 10.00 },
+                    { name: "Amstel 600ml", desc: "", price: 16.00 }
+                ]
+            },
+            // 12. DRINKS
+            {
+                category: "Drinks e Caipirinhas",
+                description: "",
+                items: [
+                    { name: "Marguerita", desc: "Tequila, Mix de limão e Curaçau", price: 30.00 },
+                    { name: "Espanhola", desc: "Vinho Leite condesado, morango ou abacaxi e gelo", price: 30.00 },
+                    { name: "Frozen", desc: "Tequila, Mix de limão gelo ou frutas", price: 32.00 },
+                    { name: "Sexy On The Beach", desc: "Licor de pessego, vodka e dell vale", price: 30.00 },
+                    { name: "Mogito", desc: "Rum, Hortelã e limão", price: 30.00 },
+                    { name: "Tequila Run Rise", desc: "Tequila , suco de laranja e groselha", price: 30.00 },
+                    { name: "Submarino", desc: "Cerveja e Tequila", price: 35.00 },
+                    { name: "Summer Apple", desc: "Rum carta ouro,Big Apple, Gelo, licor fino e garana", price: 30.00 },
+                    { name: "Doçura Loka", desc: "Amarula Wisk Sorvete", price: 38.00 },
+                    { name: "Amarula (Dose)", desc: "", price: 28.00 },
+                    { name: "Stock", desc: "", price: 30.00 },
+                    { name: "Red Label (DOSE)", desc: "", price: 25.00 },
+                    { name: "Saquerinha", desc: "Sabores, morango, abacaxi ou limão", price: 26.00 },
+                    { name: "Caipiroska", desc: "Smirnof ( Nacional )", price: 24.00 },
+                    { name: "Gin De Melancia", desc: "", price: 40.00 },
+                    { name: "Jack Daniel's (Dose)", desc: "", price: 35.00 },
+                    { name: "Black Label (Dose)", desc: "", price: 30.00 },
+                    { name: "Old Parr (Dose)", desc: "", price: 35.00 },
+                    { name: "Buchanan's (Dose)", desc: "", price: 40.00 },
+                    { name: "Caipirinha", desc: "( velho barreiro )", price: 20.00 },
+                    { name: "Ciroc Beach (Dose)", desc: "", price: 45.00 },
+                    { name: "Batida Amazônica", desc: "", price: 32.00 },
+                    { name: "Ciroc Blue (Dose)", desc: "", price: 19.90 },
+                    { name: "Ciroc Coconut (Dose)", desc: "", price: 40.00 },
+                    { name: "Ciroc Pineapple (Dose)", desc: "", price: 40.00 },
+                    { name: "Ciroc Red Berry (Dose)", desc: "", price: 40.00 },
+                    { name: "Ciroc Vodka (Dose)", desc: "", price: 35.00 },
+                    { name: "Gin Tonica", desc: "( Limão e Laranja )", price: 30.00 },
+                    { name: "Gin Tropical", desc: "Red bull tropical e Gin", price: 35.00 },
+                    { name: "Gin De Pitaya", desc: "", price: 40.00 }
+                ]
+            },
+            // 13. SOBREMESAS
+            {
+                category: "Sobremesas",
+                description: "",
+                items: [
+                    { name: "Cocada Cremosa 150g", desc: "", price: 16.00 },
+                    { name: "Chesse Cake de Frutas Vermelhas", desc: "", price: 14.00 },
+                    { name: "Torta Holandesa", desc: "", price: 14.00 },
+                    { name: "Torta de Limão", desc: "", price: 14.00 },
+                    { name: "Torta de Mousse Chocolate", desc: "", price: 14.00 },
+                    { name: "Torta de Maracujá", desc: "", price: 14.00 },
+                    { name: "Petit Gateau", desc: "", price: 20.00 },
+                    { name: "Banana Flambada", desc: "", price: 20.00 },
+                    { name: "Pudim de leite condensado", desc: "", price: 16.00 },
+                    { name: "Cestas de Churros", desc: "", price: 20.00 },
+                    { name: "Taça 2 Bolas de Sorvete Sabor Creme", desc: "Cobertura Chocolate ou Morango", price: 18.00 }
+                ]
+            },
+            // 14. AÇAI
+            {
+                category: "Açai",
+                description: "",
+                items: [
+                    { name: "Casadinho de frutas vermelhas", desc: "", price: 33.00 },
+                    { name: "Barca de açai c/ frutas ( Grande )", desc: "", price: 70.00 },
+                    { name: "Barca de açai c/ frutas ( Pequeno )", desc: "", price: 56.00 },
+                    { name: "Suco power 400ML", desc: "", price: 20.00 },
+                    { name: "Casadinho de cupuacu", desc: "", price: 32.00 },
+                    { name: "Casadinho de manga ou maracuja", desc: "", price: 29.00 },
+                    { name: "Casadinho de morango", desc: "", price: 32.00 },
+                    { name: "Suco power 700ml", desc: "", price: 30.00 }
+                ]
+            },
+            // 15. VINHOS
+            {
+                category: "Vinhos",
+                description: "",
+                items: [
+                    { name: "Vinho Periquita", desc: "", price: 130.00 },
+                    { name: "Vinho Miolo", desc: "", price: 120.00 },
+                    { name: "Vinho Rio Grande", desc: "", price: 50.00 },
+                    { name: "Vinho Pergola", desc: "", price: 50.00 },
+                    { name: "Vinho Aroma Tamit", desc: "", price: 120.00 },
+                    { name: "Vinho Reserva Concha", desc: "", price: 70.00 },
+                    { name: "Vinho Chalise", desc: "", price: 45.00 },
+                    { name: "Vinho Rio Sol", desc: "", price: 60.00 },
+                    { name: "Vinho Contra Bbasso Rosso", desc: "", price: 50.00 },
+                    { name: "Vinho Contra Bbasso Bianco", desc: "", price: 50.00 },
+                    { name: "Vinho Quinta de Moraes", desc: "Garrafa", price: 59.00 },
+                    { name: "Vinho XV de Novembro", desc: "Garrafa", price: 55.00 },
+                    { name: "Vinho Demi Seco", desc: "Garrafa", price: 59.00 },
+                    { name: "Vinho argentina", desc: "Garrafa", price: 59.00 },
+                    { name: "Vinho Chilano", desc: "Garrafa", price: 68.00 }
+                ]
+            }
+        ];
+
+        function renderNav() {
+            const nav = document.getElementById('category-nav');
+            let html = '';
+            menuData.forEach((cat, index) => {
+                const isSpecial = cat.highlight;
+                const activeClass = isSpecial 
+                    ? 'bg-brand-gold text-brand-dark font-bold border-brand-gold' 
+                    : 'bg-white/5 text-gray-300 border-white/10';
+                
+                html += `
+                    <a href="#cat-${index}" class="px-4 py-2 rounded-full text-xs uppercase tracking-wider whitespace-nowrap border ${activeClass} transition-transform active:scale-95">
+                        ${isSpecial ? '★ ' + cat.category : cat.category}
+                    </a>
+                `;
+            });
+            nav.innerHTML = html;
+        }
+
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            let html = '';
+            
+            menuData.forEach((cat, index) => {
+                const isSpecial = cat.highlight;
+                
+                html += `
+                    <div id="cat-${index}" class="section-group">
+                        <div class="mb-4 pl-2 border-l-4 ${isSpecial ? 'border-brand-gold' : 'border-brand-red'}">
+                            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                                ${cat.category}
+                                ${isSpecial ? '<span class="text-[10px] bg-brand-red text-white px-2 py-0.5 rounded-sm uppercase tracking-widest">Limitado</span>' : ''}
+                            </h3>
+                            ${cat.description ? `<p class="text-xs text-gray-400 mt-1">${cat.description}</p>` : ''}
+                        </div>
+                `;
+
+                if(cat.contextInfo) {
+                    html += `<div class="info-box reveal">${cat.contextInfo}</div>`;
+                }
+                        
+                html += `<div class="flex flex-col gap-3 group-items-container">`;
+
+                cat.items.forEach(item => {
+                    if (item.subHeader) {
+                        html += `
+                            <div class="sub-header-styled reveal">
+                                <h4>${item.subHeader}</h4>
+                                <div class="line"></div>
+                            </div>
+                        `;
+                    } else {
+                        const cardClass = isSpecial ? 'saturday-special rounded-xl' : 'glass-list-item rounded-lg';
+                        const priceColor = isSpecial ? 'text-brand-gold' : 'text-brand-gold';
+                        
+                        const displayPrice = item.customPrice 
+                            ? `<span class="text-[10px] font-medium tracking-wide border border-brand-gold/30 px-2 py-1 rounded text-brand-gold whitespace-nowrap">${item.customPrice}</span>` 
+                            : `R$ ${item.price.toFixed(2).replace('.', ',')}`;
+
+                        let imgSrc = getImage(item.img, cat.category);
+
+                        html += `
+                            <div class="${cardClass} p-3 flex gap-4 items-center reveal relative overflow-hidden group searchable-item">
+                                 ${isSpecial ? '<div class="absolute -right-4 top-2 bg-brand-gold text-brand-dark text-[8px] font-bold px-6 py-1 rotate-45 z-10">ESPECIAL</div>' : ''}
+                                
+                                <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-800">
+                                    <img src="${imgSrc}" loading="lazy" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                </div>
+                                
+                                <div class="flex-grow min-w-0 flex flex-col justify-between h-24 py-1">
+                                    <div>
+                                        <h4 class="text-white font-semibold text-sm leading-tight pr-2 item-name">${item.name}</h4>
+                                        <p class="text-[11px] text-gray-400 leading-tight mt-1 line-clamp-2 item-desc">${item.desc}</p>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between mt-auto">
+                                        <span class="${priceColor} font-bold text-base">${displayPrice}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function setupObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // --- FUNCIONALIDADE DE BUSCA ---
+        function setupSearch() {
+            const searchInput = document.getElementById('search-input');
+            
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const sections = document.querySelectorAll('.section-group');
+
+                sections.forEach(section => {
+                    let hasVisibleItems = false;
+                    const items = section.querySelectorAll('.searchable-item');
+                    
+                    items.forEach(item => {
+                        const name = item.querySelector('.item-name').textContent.toLowerCase();
+                        const desc = item.querySelector('.item-desc').textContent.toLowerCase();
+                        
+                        if (name.includes(term) || desc.includes(term)) {
+                            item.style.display = 'flex';
+                            hasVisibleItems = true;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    // Oculta a seção inteira se não houver itens visíveis
+                    if (hasVisibleItems) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // --- VOLTAR AO TOPO ---
+        function setupBackToTop() {
+            const btn = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNav();
+            renderMenu();
+            setupObserver();
+            setupSearch();
+            setupBackToTop();
+        });
+    </script>
+</body>
+</html>
